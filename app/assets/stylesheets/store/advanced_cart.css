@@ -1,0 +1,12 @@
+table#shipping_costs {
+  width: 40%;
+  margin-top: 2em;
+  th { text-align: left; }
+  th.price { width: 70px; }
+}
+
+div#estimate_shipping_costs {
+  margin: 40px 0;
+}
+
+.ajax_loader { display: none; }

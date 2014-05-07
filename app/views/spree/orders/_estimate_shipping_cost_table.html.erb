@@ -1,0 +1,12 @@
+<table id="shipping_costs">
+  <tr>
+    <th><%= Spree.t(:shipping_method) %></th>
+    <th class="price"><%= Spree.t(:price) %></th>
+  </tr>
+  <% @esc_values.each do |name, price, error_message| %>
+    <tr>
+      <td><%= name %></td>
+      <td><%= price ? number_to_currency(price) : error_message %></td>
+    </tr>
+  <% end %>
+</table>
