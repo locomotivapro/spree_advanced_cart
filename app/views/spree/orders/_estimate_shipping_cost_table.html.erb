@@ -1,12 +1,20 @@
+<%= form_tag apply_shipping_cost_path, method: :post do %>
+<%= hidden_field_tag :zipcode, @zipcode %>
 <table id="shipping_costs">
   <tr>
     <th><%= Spree.t(:shipping_method) %></th>
     <th class="price"><%= Spree.t(:price) %></th>
   </tr>
-  <% @esc_values.each do |name, price, error_message| %>
+  <% @esc_values.each do |name, price, error_message, id| %>
     <tr>
-      <td><%= name %></td>
+      <td>
+      <%= id %>
+        <%= radio_button_tag :shipping_method_id, id %>
+        <%= name %>
+      </td>
       <td><%= price ? number_to_currency(price) : error_message %></td>
     </tr>
   <% end %>
 </table>
+<%= submit_tag "Aplicar" %>
+<% end %>

@@ -7,6 +7,7 @@ Spree::OrdersController.class_eval do
     address_attrs = { :zipcode => params[:zipcode],
                       :country_id => country_id }
 
+    @zipcode = params[:zipcode]
     @order.ship_address = Spree::Address.new(address_attrs)
     package = Spree::Stock::Coordinator.new(@order).packages.first
     @shipping_rates = package.shipping_rates
@@ -20,7 +21,7 @@ Spree::OrdersController.class_eval do
         rescue Net::HTTPServiceUnavailable
           error = nil # carrier is unavailable atm, don't show this shipping method in the list
         end
-        [sr.name, rate, error]
+        [sr.name, rate, error, sr.shipping_method.id]
       end.select{|sr| sr[1] || sr[2]}. # a shipping calculator can return nil for the price if error occurred
           sort_by{|sr| sr[1] ? sr[1] : Float::MAX} # mimic default spree_core behavior, preserve asc cost order
 
@@ -33,6 +34,12 @@ Spree::OrdersController.class_eval do
         render :action => :estimate_shipping_cost
       end
     end
+  end
+
+  def apply_shipping_cost
+    @order = current_order(lock: true)
+    shipping_method_id = params[:shipping_method_id]
+    @order.create_cart_shipment(shipping_method_id)
   end
 
 end
