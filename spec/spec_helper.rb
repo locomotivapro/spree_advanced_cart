@@ -25,15 +25,17 @@ Dir[File.join(File.dirname(__FILE__), 'support/**/*.rb')].each { |f| require f }
 
 # Requires factories defined in spree_core
 require 'spree/testing_support/factories'
+require 'spree/testing_support/preferences'
 require 'spree/testing_support/controller_requests'
 require 'spree/testing_support/authorization_helpers'
 require 'spree/testing_support/url_helpers'
 
 # Requires factories defined in lib/spree_advanced_cart/factories.rb
-require 'spree_advanced_cart/factories'
+#require 'spree_advanced_cart/factories'
 
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
+  config.include Spree::TestingSupport::Preferences
 
   # == URL Helpers
   #
@@ -59,7 +61,7 @@ RSpec.configure do |config|
   # Capybara javascript drivers require transactional fixtures set to false, and we use DatabaseCleaner
   # to cleanup after each test instead.  Without transactional fixtures set to false the records created
   # to setup a test will be unavailable to the browser, which runs under a separate server instance.
-  config.use_transactional_fixtures = false
+  config.use_transactional_fixtures = true
 
   # Ensure Suite is set to use transactions for speed.
   config.before :suite do
@@ -71,6 +73,7 @@ RSpec.configure do |config|
   config.before :each do
     DatabaseCleaner.strategy = example.metadata[:js] ? :truncation : :transaction
     DatabaseCleaner.start
+    reset_spree_preferences
   end
 
   # After each spec clean the database.
