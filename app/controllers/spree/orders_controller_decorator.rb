@@ -39,7 +39,9 @@ Spree::OrdersController.class_eval do
   def apply_shipping_cost
     @order = current_order(lock: true)
     shipping_method_id = params[:shipping_method_id]
-    @order.create_cart_shipment(shipping_method_id)
+    @order.create_proposed_shipments(shipping_method_id)
+    flash[:notice] = 'success'
+    redirect_to cart_path
   end
 
 end

@@ -1,4 +1,5 @@
 <%= form_tag apply_shipping_cost_path, method: :post do %>
+  <%= @esc_values %>
 <%= hidden_field_tag :zipcode, @zipcode %>
 <table id="shipping_costs">
   <tr>

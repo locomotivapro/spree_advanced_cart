@@ -24,6 +24,13 @@ module Spree
           shipping_rates.first.cost.should eq 4.00
         end
 
+        it "return only passed shipping method" do
+          pending "Need to create without stubs"
+          new_estimator = Estimator.new(order, shipping_method.id)
+          shipping_rates = new_estimator.shipping_rates(package)
+          shipping_rates.first.cost.should eq 4.00
+        end
+
         it "does not return shipping rates from a shipping method if the order's ship address is in a different zone" do
           shipping_method.zones.each{|z| z.members.delete_all}
           shipping_rates = subject.shipping_rates(package)
